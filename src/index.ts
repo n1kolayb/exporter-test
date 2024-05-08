@@ -33,12 +33,12 @@ Pulsar.export(
     const initialTokens = [...tokens];
 
     // Filter by brand, if specified by the VSCode extension or pipeline configuration
-    if (context.brandId) {
-      tokens = tokens.filter((token) => token.brandId === context.brandId);
-      tokenGroups = tokenGroups.filter(
-        (tokenGroup) => tokenGroup.brandId === context.brandId
-      );
-    }
+    // if (context.brandId) {
+    //   tokens = tokens.filter((token) => token.brandId === context.brandId);
+    //   tokenGroups = tokenGroups.filter(
+    //     (tokenGroup) => tokenGroup.brandId === context.brandId
+    //   );
+    // }
 
     let ALLTHEMES = [];
 
