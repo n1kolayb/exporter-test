@@ -40,12 +40,15 @@ Pulsar.export(
 
     // Apply theme, if specified by the VSCode extension or pipeline configuration
     if (context.themeId) {
-      console.log(context.themeId);
+      console.log(context);
 
       const themes = await sdk.tokens.getTokenThemes(remoteVersionIdentifier);
 
       console.log(themes);
-      const theme = themes.find((theme) => theme.id === context.themeId);
+      const theme = themes.find(
+        (theme) =>
+          theme.id === context.themeId || theme.idInVersion === context.themeId
+      );
       if (theme) {
         tokens = await sdk.tokens.computeTokensByApplyingThemes(tokens, [
           theme,
