@@ -40,12 +40,16 @@ Pulsar.export(
       );
     }
 
+    let ALLTHEMES = [];
+
     // Apply theme, if specified by the VSCode extension or pipeline configuration
     console.log("START");
     if (context.themeId) {
       console.log(context);
 
       const themes = await sdk.tokens.getTokenThemes(remoteVersionIdentifier);
+      // @ts-ignore
+      ALLTHEMES = [...themes];
 
       console.log(themes);
       const theme = themes.find(
@@ -80,7 +84,9 @@ Pulsar.export(
     console.log(cssVariables);
 
     // Create CSS file content
-    let content = `:root {\n${cssVariables} \n ${JSON.stringify(
+    let content = `:root {\n${cssVariables} \n context \n ${JSON.stringify(
+      context
+    )} \n ALL THEMES \n ${JSON.stringify(ALLTHEMES)} \n \n ${JSON.stringify(
       initialTokens
     )} \n csstokens \n ${JSON.stringify(tokens)} \n \n}`;
     if (exportConfiguration.generateDisclaimer) {
