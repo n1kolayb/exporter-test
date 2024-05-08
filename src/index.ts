@@ -38,21 +38,25 @@ Pulsar.export(
       );
     }
 
-    // // Apply theme, if specified by the VSCode extension or pipeline configuration
-    // if (context.themeId) {
-    //   const themes = await sdk.tokens.getTokenThemes(remoteVersionIdentifier);
-    //   const theme = themes.find((theme) => theme.id === context.themeId);
-    //   if (theme) {
-    //     tokens = await sdk.tokens.computeTokensByApplyingThemes(tokens, [
-    //       theme,
-    //     ]);
-    //   } else {
-    //     // Don't allow applying theme which doesn't exist in the system
-    //     throw new Error(
-    //       "Unable to apply theme which doesn't exist in the system."
-    //     );
-    //   }
-    // }
+    // Apply theme, if specified by the VSCode extension or pipeline configuration
+    if (context.themeId) {
+      console.log("themeId", context.themeId);
+
+      const themes = await sdk.tokens.getTokenThemes(remoteVersionIdentifier);
+
+      console.log("themes", themes);
+      const theme = themes.find((theme) => theme.id === context.themeId);
+      if (theme) {
+        tokens = await sdk.tokens.computeTokensByApplyingThemes(tokens, [
+          theme,
+        ]);
+      } else {
+        // Don't allow applying theme which doesn't exist in the system
+        throw new Error(
+          "Unable to apply theme which doesn't exist in the system."
+        );
+      }
+    }
 
     // Convert all color tokens to CSS variables
     const mappedTokens = new Map(tokens.map((token) => [token.id, token]));
