@@ -8,7 +8,8 @@ import { ExporterConfiguration } from "../config";
 
 import { getColorTokenFiles } from "./content/colors";
 import { getSpacingTokenFiles } from "./content/spacing";
-
+import { getFontSizeTokenFiles } from "./content/fontSize";
+import { getLetterSpacingTokenFiles } from "./content/letterSpacing";
 /**
  * Export entrypoint.
  * When running `export` through extensions or pipelines, this function will be called.
@@ -36,7 +37,13 @@ Pulsar.export(
       remoteVersionIdentifier,
     });
 
-    files.push(getSpacingTokenFiles({ tokens, tokenGroups }));
+    files.push(
+      ...[
+        getSpacingTokenFiles({ tokens, tokenGroups }),
+        getFontSizeTokenFiles({ tokens, tokenGroups }),
+        getLetterSpacingTokenFiles({ tokens, tokenGroups }),
+      ]
+    );
 
     // Create output file and return it
     return files;
