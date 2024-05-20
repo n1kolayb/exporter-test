@@ -10,6 +10,9 @@ import { getColorTokenFiles } from "./content/colors";
 import { getSpacingTokenFiles } from "./content/spacing";
 import { getFontSizeTokenFiles } from "./content/fontSize";
 import { getLetterSpacingTokenFiles } from "./content/letterSpacing";
+import { getRadiusTokenFiles } from "./content/radius";
+import { getBorderWidthTokenFiles } from "./content/borderWidth";
+import { getTypographyTokenFiles } from "./content/typography";
 /**
  * Export entrypoint.
  * When running `export` through extensions or pipelines, this function will be called.
@@ -37,11 +40,20 @@ Pulsar.export(
       remoteVersionIdentifier,
     });
 
+    await getTypographyTokenFiles({
+      sdk,
+      context,
+      remoteVersionIdentifier,
+      tokenGroups,
+    });
+
     files.push(
       ...[
         getSpacingTokenFiles({ tokens, tokenGroups }),
         getFontSizeTokenFiles({ tokens, tokenGroups }),
         getLetterSpacingTokenFiles({ tokens, tokenGroups }),
+        getRadiusTokenFiles({ tokens, tokenGroups }),
+        getBorderWidthTokenFiles({ tokens, tokenGroups }),
       ]
     );
 
