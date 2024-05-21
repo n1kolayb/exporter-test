@@ -4,15 +4,15 @@ import {
   OutputTextFile,
   PulsarContext,
   RemoteVersionIdentifier,
-  SizeToken,
   Supernova,
   Token,
   TokenGroup,
   TokenType,
+  TypographyToken,
 } from "@supernovaio/sdk-exporters";
 
 import { generateContentForFile } from "./utils";
-import { spacingTokenToCSS } from "./token";
+import { typographyTokenToCSS } from "./token";
 
 export function convertTokensToCSS({
   tokens,
@@ -23,14 +23,10 @@ export function convertTokensToCSS({
 }) {
   const mappedTokens = new Map(tokens.map((token) => [token.id, token]));
 
-  const dimTokens = tokens.filter((t) => t.tokenType === TokenType.dimension);
-
-  // console.log(dimTokens);
-
   const cssVariables = tokens
-    .filter((t) => t.tokenType === TokenType.dimension)
+    .filter((t) => t.tokenType === TokenType.typography)
     .map((token) =>
-      spacingTokenToCSS(token as SizeToken, mappedTokens, tokenGroups)
+      typographyTokenToCSS(token as TypographyToken, mappedTokens, tokenGroups)
     )
     .join("\n");
 
@@ -62,7 +58,7 @@ const TYPOGRAPHY_TOKENS = [
   "Legal-02",
 ];
 
-export async function getTypographyTokenFiles({
+export async function generateTypographyTokens({
   remoteVersionIdentifier,
   sdk,
   context,
@@ -258,19 +254,25 @@ export async function getTypographyTokenFiles({
       }
     })
   );
+}
 
-  // TODO: GET TYPOGRAPHY TOKENS AFTER CREATION/UPDATE AND CONVERT TO CSS
+export function getTypographyTokenFiles({
+  tokens,
+  tokenGroups,
+}: {
+  tokens: Token[];
+  tokenGroups: TokenGroup[];
+}) {
+  const typographyTokensCSS = convertTokensToCSS({ tokens, tokenGroups });
 
-  // const borderRadiusTokens = convertTokensToCSS({ tokens, tokenGroups });
+  let files: OutputTextFile = FileHelper.createTextFile({
+    relativePath: "./",
+    fileName: "typography.css",
+    content: generateContentForFile({
+      cssVariables: typographyTokensCSS,
+      geneateDisclaimer: true,
+    }),
+  });
 
-  // let files: OutputTextFile = FileHelper.createTextFile({
-  //   relativePath: "./",
-  //   fileName: "typography.css",
-  //   content: generateContentForFile({
-  //     cssVariables: borderRadiusTokens,
-  //     geneateDisclaimer: true,
-  //   }),
-  // });
-
-  // return files;
+  return files;
 }

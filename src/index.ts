@@ -12,7 +12,10 @@ import { getFontSizeTokenFiles } from "./content/fontSize";
 import { getLetterSpacingTokenFiles } from "./content/letterSpacing";
 import { getRadiusTokenFiles } from "./content/radius";
 import { getBorderWidthTokenFiles } from "./content/borderWidth";
-import { getTypographyTokenFiles } from "./content/typography";
+import {
+  getTypographyTokenFiles,
+  generateTypographyTokens,
+} from "./content/typography";
 /**
  * Export entrypoint.
  * When running `export` through extensions or pipelines, this function will be called.
@@ -30,21 +33,23 @@ Pulsar.export(
     };
 
     // Fetch the necessary data
-    let tokens = await sdk.tokens.getTokens(remoteVersionIdentifier);
     let tokenGroups = await sdk.tokens.getTokenGroups(remoteVersionIdentifier);
+
+    // Generate typography tokens, since they are not converted from figma correctly
+    await generateTypographyTokens({
+      sdk,
+      context,
+      remoteVersionIdentifier,
+      tokenGroups,
+    });
+
+    const tokens = await sdk.tokens.getTokens(remoteVersionIdentifier);
 
     const files = await getColorTokenFiles({
       sdk,
       tokens,
       tokenGroups,
       remoteVersionIdentifier,
-    });
-
-    await getTypographyTokenFiles({
-      sdk,
-      context,
-      remoteVersionIdentifier,
-      tokenGroups,
     });
 
     files.push(
@@ -54,6 +59,7 @@ Pulsar.export(
         getLetterSpacingTokenFiles({ tokens, tokenGroups }),
         getRadiusTokenFiles({ tokens, tokenGroups }),
         getBorderWidthTokenFiles({ tokens, tokenGroups }),
+        getTypographyTokenFiles({ tokens, tokenGroups }),
       ]
     );
 
