@@ -36,12 +36,13 @@ Pulsar.export(
     let tokenGroups = await sdk.tokens.getTokenGroups(remoteVersionIdentifier);
 
     // Generate typography tokens, since they are not converted from figma correctly
-    await generateTypographyTokens({
-      sdk,
-      context,
-      remoteVersionIdentifier,
-      tokenGroups,
-    });
+    // TODO: Uncomment this when Supernova fixes the issue with creating/updating tokens via pipeline
+    // await generateTypographyTokens({
+    //   sdk,
+    //   context,
+    //   remoteVersionIdentifier,
+    //   tokenGroups,
+    // });
 
     const tokens = await sdk.tokens.getTokens(remoteVersionIdentifier);
 
