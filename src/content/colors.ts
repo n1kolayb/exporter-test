@@ -76,10 +76,11 @@ export async function getColorTokenFiles({
   let files: OutputTextFile[] = [
     FileHelper.createTextFile({
       relativePath: "./",
-      fileName: "light-theme.css",
+      fileName: "light-theme.scss",
       content: generateContentForFile({
         cssVariables: defaultThemeTokens,
         geneateDisclaimer: true,
+        mixinName: "light-colors",
       }),
     }),
   ];
@@ -100,10 +101,11 @@ export async function getColorTokenFiles({
       files.push(
         FileHelper.createTextFile({
           relativePath: "./",
-          fileName: `${themeTokenFile.name}-theme.css`,
+          fileName: `${themeTokenFile.name}-theme.scss`,
           content: generateContentForFile({
             cssVariables: themeTokenFile.cssVariables,
             geneateDisclaimer: true,
+            mixinName: `${themeTokenFile.name}-colors`,
           }),
         })
       );
