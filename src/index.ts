@@ -16,6 +16,7 @@ import {
   getTypographyTokenFiles,
   generateTypographyTokens,
 } from "./content/typography";
+import { getFontWeightTokenFiles } from "./content/fontWeight";
 /**
  * Export entrypoint.
  * When running `export` through extensions or pipelines, this function will be called.
@@ -61,6 +62,7 @@ Pulsar.export(
         getRadiusTokenFiles({ tokens, tokenGroups }),
         getBorderWidthTokenFiles({ tokens, tokenGroups }),
         getTypographyTokenFiles({ tokens, tokenGroups }),
+        getFontWeightTokenFiles({ tokens, tokenGroups }),
       ]
     );
 

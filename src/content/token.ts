@@ -6,6 +6,7 @@ import {
 } from "@supernovaio/export-helpers";
 import {
   ColorToken,
+  FontWeightToken,
   SizeToken,
   Token,
   TokenGroup,
@@ -52,6 +53,17 @@ export function spacingTokenToCSS(
   });
 
   return `  --${name}: ${value};`;
+}
+
+export function fontWeightTokenToCSS(
+  token: FontWeightToken,
+  mappedTokens: Map<string, Token>,
+  tokenGroups: Array<TokenGroup>
+): string {
+  // First creating the name of the token, using helper function which turns any token name / path into a valid variable name
+  const name = tokenVariableName(token, tokenGroups);
+
+  return `  --${name}: ${token.value.text};`;
 }
 
 export function typographyTokenToCSS(

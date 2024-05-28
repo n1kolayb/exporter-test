@@ -79,6 +79,11 @@ export async function generateTypographyTokens({
     throw new Error("Typography group not found");
   }
 
+  // EITHER REFERENCE FONT WEIGHT OR PARSEINT VALUES FROM token
+  const fontWeightTokens = tokens.filter(
+    (token) => token.tokenType === TokenType.fontWeight
+  );
+
   await Promise.all(
     TYPOGRAPHY_TOKENS.map(async (typographyTokenName) => {
       const typographyTokenIds = tokenGroups
@@ -188,8 +193,16 @@ export async function generateTypographyTokens({
           ...(fontWeightToken && {
             fontWeight: {
               // @ts-ignore
-              measure: fontWeightToken.value.measure,
-              referencedTokenId: null,
+              text: String(fontWeightToken.value.measure),
+              // Another hack needed to convert typography token correctly
+              // Match string fontWeight token with an actual fontWeight token by value
+              // and use its id as reference
+              referencedTokenId:
+                fontWeightTokens.find(
+                  (_token) =>
+                    // @ts-ignore
+                    _token.value.text === String(fontWeightToken.value.measure)
+                )?.id || null,
             },
           }),
           ...(fontSizeToken && {
