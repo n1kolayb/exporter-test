@@ -284,6 +284,7 @@ export function getTypographyTokenFiles({
     content: generateContentForFile({
       cssVariables: typographyTokensCSS,
       geneateDisclaimer: true,
+      imports: ["./font-weight.css"],
     }),
   });
 
