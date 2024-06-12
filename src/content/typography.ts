@@ -11,8 +11,8 @@ import {
   TypographyToken,
 } from "@supernovaio/sdk-exporters";
 
-import { generateContentForFile } from "./utils";
-import { typographyTokenToCSS } from "./token";
+import { generateGenericFile } from "./utils";
+import { typographyTokenToCSSClass } from "./token";
 
 export function convertTokensToCSS({
   tokens,
@@ -21,12 +21,10 @@ export function convertTokensToCSS({
   tokens: Token[];
   tokenGroups: TokenGroup[];
 }) {
-  const mappedTokens = new Map(tokens.map((token) => [token.id, token]));
-
   const cssVariables = tokens
     .filter((t) => t.tokenType === TokenType.typography)
     .map((token) =>
-      typographyTokenToCSS(token as TypographyToken, mappedTokens, tokenGroups)
+      typographyTokenToCSSClass(token as TypographyToken, tokenGroups)
     )
     .join("\n");
 
@@ -281,10 +279,9 @@ export function getTypographyTokenFiles({
   let files: OutputTextFile = FileHelper.createTextFile({
     relativePath: "./",
     fileName: "typography.css",
-    content: generateContentForFile({
+    content: generateGenericFile({
       cssVariables: typographyTokensCSS,
       geneateDisclaimer: true,
-      imports: ["./font-weight.css"],
     }),
   });
 

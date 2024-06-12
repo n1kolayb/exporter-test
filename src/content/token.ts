@@ -87,6 +87,36 @@ export function typographyTokenToCSS(
   return `  --${name}: ${value};`;
 }
 
+export function typographyTokenToCSSClass(
+  token: TypographyToken,
+  tokenGroups: Array<TokenGroup>
+) {
+  // First creating the name of the token, using helper function which turns any token name / path into a valid variable name
+  const name = tokenVariableName(token, tokenGroups);
+
+  return `.${name} {
+  font-family: "${token.value.fontFamily.text}";
+  font-weight: ${token.value.fontWeight.text};
+  font-size: ${token.value.fontSize.measure}${CSSHelper.unitToCSS(
+    token.value.fontSize.unit
+  )};
+  text-decoration: ${token.value.textDecoration.value};
+  letter-spacing: ${token.value.letterSpacing.measure.toFixed(
+    3
+  )}${CSSHelper.unitToCSS(token.value.letterSpacing.unit)};
+  ${
+    token.value.lineHeight
+      ? `line-height: ${token.value.lineHeight.measure}${CSSHelper.unitToCSS(
+          token.value.lineHeight.unit
+        )};`
+      : ""
+  }
+  text-indent: ${token.value.paragraphIndent.measure}${CSSHelper.unitToCSS(
+    token.value.paragraphIndent.unit
+  )};
+}\n`;
+}
+
 function tokenVariableName(
   token: Token,
   tokenGroups: Array<TokenGroup>
