@@ -7,10 +7,12 @@ import {
 import {
   ColorToken,
   FontWeightToken,
+  LetterSpacingTokenValue,
   SizeToken,
   Token,
   TokenGroup,
   TypographyToken,
+  Unit,
 } from "@supernovaio/sdk-exporters";
 
 export function colorTokenToCSS(
@@ -87,6 +89,24 @@ export function typographyTokenToCSS(
   return `  --${name}: ${value};`;
 }
 
+// THIS IS A HACK AIMED TO FIX LETTER SPACING VALUES BEING SET IN PERCENTS
+// PROBABLY WONT BE AN ISSUE IN THE FUTURE
+export const __HACK__letterSpacingValueToEM = (
+  tokenValue: LetterSpacingTokenValue
+) => {
+  if (tokenValue.measure === 0) {
+    return "0";
+  }
+
+  if (tokenValue.unit !== Unit.percent) {
+    return `${tokenValue.measure.toFixed(3)}${CSSHelper.unitToCSS(
+      tokenValue.unit
+    )}`;
+  }
+
+  return `${(tokenValue.measure / 100).toFixed(4)}em`;
+};
+
 export function typographyTokenToCSSClass(
   token: TypographyToken,
   tokenGroups: Array<TokenGroup>
@@ -101,9 +121,7 @@ export function typographyTokenToCSSClass(
     token.value.fontSize.unit
   )};
   text-decoration: ${token.value.textDecoration.value};
-  letter-spacing: ${token.value.letterSpacing.measure.toFixed(
-    3
-  )}${CSSHelper.unitToCSS(token.value.letterSpacing.unit)};
+  letter-spacing: ${__HACK__letterSpacingValueToEM(token.value.letterSpacing)};
   ${
     token.value.lineHeight
       ? `line-height: ${token.value.lineHeight.measure}${CSSHelper.unitToCSS(
