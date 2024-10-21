@@ -44,9 +44,11 @@ async function getTokensForTheme({
   allTokens: Token[];
   tokenGroups: TokenGroup[];
 }) {
-  const tokens = await sdk.tokens.computeTokensByApplyingThemes(allTokens, [
-    theme,
-  ]);
+  const tokens = await sdk.tokens.computeTokensByApplyingThemes(
+    allTokens,
+    allTokens,
+    [theme]
+  );
 
   return {
     name: theme.codeName,
